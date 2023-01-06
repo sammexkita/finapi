@@ -50,6 +50,23 @@ app.get("/statement", verifyIfExistsAccountCPF, (req, res) => {
   return res.json(customer.statement);
 });
 
+app.post("/deposit", verifyIfExistsAccountCPF, (req, res) => {
+  const { description, amount } = req.body;
+
+  const { customer } = req;
+
+  const statemnentOperation = {
+    description,
+    amount,
+    created_at: new Date(),
+    type: "credit"
+  };
+
+  customer.statement.push(statemnentOperation);
+
+  return res.status(201).send();
+});
+
 app.get("/", (req, res) => {
   res.json({
     message: "Hello World!"
