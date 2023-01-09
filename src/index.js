@@ -132,6 +132,23 @@ app.get("/", (req, res) => {
   });
 });
 
+app.delete("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+  customers.splice(customer, 1);
+  return res.status(200).json(customers);
+});
+
+app.get("/balance", verifyIfExistsAccountCPF,  (req, res) => {
+  const { customer } = req;
+
+  const balance = {
+    balance: getBalance(customer.statement),
+  };
+
+  return res.status(200).json(balance);
+});
+
+
 const listener = app.listen(3333, () => {
   console.log(`Server running on port ${listener.address().port} 🚀`);
 });
